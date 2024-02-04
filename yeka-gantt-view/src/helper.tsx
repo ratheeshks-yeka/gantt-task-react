@@ -6,8 +6,8 @@ export function initTasks() {
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
       end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
-      name: "Some Project",
-      id: "ProjectSample",
+      name: "Nahanz Project",
+      id: "NahanzProject",
       progress: 25,
       type: "project",
       hideChildren: false,
@@ -26,7 +26,7 @@ export function initTasks() {
       id: "Task 0",
       progress: 45,
       type: "task",
-      project: "ProjectSample",
+      project: "NahanzProject",
       displayOrder: 2,
     },
     {
@@ -37,7 +37,7 @@ export function initTasks() {
       progress: 25,
       dependencies: ["Task 0"],
       type: "task",
-      project: "ProjectSample",
+      project: "NahanzProject",
       displayOrder: 3,
     },
     {
@@ -48,7 +48,7 @@ export function initTasks() {
       progress: 10,
       dependencies: ["Task 1"],
       type: "task",
-      project: "ProjectSample",
+      project: "NahanzProject",
       displayOrder: 4,
     },
     {
@@ -59,7 +59,7 @@ export function initTasks() {
       progress: 2,
       dependencies: ["Task 2"],
       type: "task",
-      project: "ProjectSample",
+      project: "NahanzProject",
       displayOrder: 5,
     },
     {
@@ -70,7 +70,7 @@ export function initTasks() {
       type: "task",
       progress: 70,
       dependencies: ["Task 2"],
-      project: "ProjectSample",
+      project: "NahanzProject",
       displayOrder: 6,
     },
     {
@@ -81,7 +81,7 @@ export function initTasks() {
       progress: currentDate.getMonth(),
       type: "milestone",
       dependencies: ["Task 4"],
-      project: "ProjectSample",
+      project: "NahanzProject",
       displayOrder: 7,
     },
     {
@@ -92,6 +92,43 @@ export function initTasks() {
       progress: 0,
       isDisabled: true,
       type: "task",
+    },
+    {
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
+      name: "Fauzat",
+      id: "2",
+      progress: 25,
+      type: "project",
+      hideChildren: false,
+      displayOrder: 8,
+    },
+    {
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+      end: new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth(),
+        2,
+        12,
+        28
+      ),
+      name: "Imstallation",
+      id: "FTask 0",
+      progress: 45,
+      type: "task",
+      project: "2",
+      displayOrder: 9,
+    },
+    {
+      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2),
+      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 4, 0, 0),
+      name: "Support",
+      id: "FTask 1",
+      progress: 25,
+      dependencies: ["FTask 0"],
+      type: "task",
+      project: "2",
+      displayOrder: 10,
     },
   ];
   return tasks;
