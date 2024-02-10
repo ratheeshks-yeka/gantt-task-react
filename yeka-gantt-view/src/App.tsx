@@ -21,33 +21,25 @@ const App = () => {
     columnWidth = 250;
   }
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.post('http://127.0.0.1:8090/gantt-data', {"type":ganttType}, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      let tasks: Task[] = [];
+      tasks = response.data.result.projects;
+      tasks.forEach(t => {
+        t.start = new Date(t.start)
+        t.end = new Date(t.end)
+      });
+      setTasks(tasks);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // const response = await fetch('http://localhost:8090/gantt-data/', {
-        //   method: 'POST',
-        //   headers: {
-        //     'content-type': 'application/json'
-        //   },
-        //   body: JSON.stringify({"params":{}}),
-        // });
-        const response = await axios.post('http://127.0.0.1:8090/gantt-data/', {"params":{}}, {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-        });
-        let tasks: Task[] = [];
-        tasks = response.data;
-        tasks.forEach(t => {
-          t.start = new Date()
-          t.end = new Date()
-        });
-        setTasks(tasks);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -67,6 +59,7 @@ const App = () => {
       }
     }
     setTasks(newTasks);
+    fetchData()
   };
 
   const handleTaskDelete = (task: Task) => {
