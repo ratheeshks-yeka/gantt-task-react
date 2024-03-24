@@ -119,6 +119,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       const isNotLikeOriginal =
         originalSelectedTask.start !== newChangedTask.start ||
         originalSelectedTask.end !== newChangedTask.end ||
+        originalSelectedTask.plannedStart !== newChangedTask.plannedStart ||
+        originalSelectedTask.plannedEnd !== newChangedTask.plannedEnd ||
         originalSelectedTask.progress !== newChangedTask.progress;
 
       // remove listeners
@@ -130,7 +132,7 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       // custom operation start
       let operationSuccess = true;
       if (
-        (action === "move" || action === "end" || action === "start") &&
+        (action === "move" || action === "end" || action === "start" || action === "plannedStart" || action === "plannedEnd") &&
         onDateChange &&
         isNotLikeOriginal
       ) {
@@ -170,6 +172,8 @@ export const TaskGanttContent: React.FC<TaskGanttContentProps> = ({
       (ganttEvent.action === "move" ||
         ganttEvent.action === "end" ||
         ganttEvent.action === "start" ||
+        ganttEvent.action === "plannedEnd" ||
+        ganttEvent.action === "plannedStart" ||
         ganttEvent.action === "progress") &&
       svg?.current
     ) {

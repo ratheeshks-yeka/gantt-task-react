@@ -8,22 +8,40 @@
   -webkit-justify-content: flex-end;
   justify-content: flex-end;
   align-items: center;
+  background: #71639e;
+  height: 46px;
+  margin: 0px !important;
+}
+.Container{
+  margin: 8px;
 }
 
 .Button {
-  background-color: #e7e7e7;
-  color: black;
+  background-color: #71639e;
+  color: white;
   border: none;
   padding: 7px 16px;
   text-decoration: none;
-  margin: 4px 2px;
   cursor: pointer;
   font-size: 14px;
   text-align: center;
+  height: 100%;
+}
+.ButtonSelected {
+    background-color: #826fbf;
+    color: white;
+    border: none;
+    padding: 7px 16px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    height: 100%;
 }
 .Switch {
   margin: 4px 15px;
   font-size: 14px;
+  color: white;
   font-family: "Arial, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue";
   display: flex;
   justify-content: center;
@@ -68,11 +86,11 @@
 }
 
 input:checked + .Slider {
-  background-color: #2196f3;
+  background-color: #826fbf;
 }
 
 input:focus + .Slider {
-  box-shadow: 0 0 1px #2196f3;
+  box-shadow: 0 0 1px #826fbf;
 }
 
 input:checked + .Slider:before {
@@ -126,5 +144,5 @@ input:checked + .Slider:before {
   bottom: 0;
   left: 0;
   transition: all 0.4s ease-in-out;
-  background: #df5d5d;
+  background: #71639e;
 }

@@ -50,6 +50,17 @@ export const Project: React.FC<TaskItemProps> = ({ task, isSelected }) => {
         fill={processColor}
       />
       <rect
+        x={task.plannedX}
+        width={task.plannedWidth}
+        y={task.y}
+        height={task.height}
+        ry={task.barCornerRadius}
+        rx={task.barCornerRadius}
+        fill={"transparent"}
+        stroke="black"
+        strokeDasharray="4"
+      />
+      <rect
         fill={barColor}
         x={task.x1}
         width={projectWith}

@@ -153,23 +153,39 @@ const convertToBar = (
 ): BarTask => {
   let x1: number;
   let x2: number;
+  let y1: number;
+  let y2: number;
   if (rtl) {
-    x2 = taskXCoordinateRTL(task.start, dates, columnWidth);
-    x1 = taskXCoordinateRTL(task.end, dates, columnWidth);
+    x2 = task.start ? taskXCoordinateRTL(new Date(task.start), dates, columnWidth) : 0;
+    x1 = task.end ? taskXCoordinateRTL(new Date(task.end), dates, columnWidth) : 0;
+    y2 = task.plannedStart ? taskXCoordinateRTL(new Date(task.plannedStart), dates, columnWidth) : 0;
+    y1 = task.plannedEnd ? taskXCoordinateRTL(new Date(task.plannedEnd), dates, columnWidth) : 0;
   } else {
-    x1 = taskXCoordinate(task.start, dates, columnWidth);
-    x2 = taskXCoordinate(task.end, dates, columnWidth);
+    x1 = task.start ? taskXCoordinate(new Date(task.start), dates, columnWidth) : 0;
+    x2 = task.end ? taskXCoordinate(new Date(task.end), dates, columnWidth) : 0;
+    y1 = task.plannedStart ? taskXCoordinate(new Date(task.plannedStart), dates, columnWidth) : 0;
+    y2 = task.plannedEnd ? taskXCoordinate(new Date(task.plannedEnd), dates, columnWidth) : 0;
   }
   let typeInternal: TaskTypeInternal = task.type;
   if (typeInternal === "task" && x2 - x1 < handleWidth * 2) {
     typeInternal = "smalltask";
     x2 = x1 + handleWidth * 2;
   }
+  if (typeInternal === "task" && y2 - y1 < handleWidth * 2) {
+    typeInternal = "smalltask";
+    y2 = y1 + handleWidth * 2;
+  }
 
   const [progressWidth, progressX] = progressWithByParams(
     x1,
     x2,
     task.progress,
+    rtl
+  );
+  const [plannedWidth, plannedX] = progressWithByParams(
+    y1,
+    y2,
+    100,
     rtl
   );
   const y = taskYCoordinate(index, rowHeight, taskHeight);
@@ -188,9 +204,13 @@ const convertToBar = (
     x1,
     x2,
     y,
+    y1,
+    y2,
     index,
     progressX,
     progressWidth,
+    plannedX,
+    plannedWidth,
     barCornerRadius,
     handleWidth,
     hideChildren,
@@ -232,9 +252,13 @@ const convertToMilestone = (
     x1,
     x2,
     y,
+    y1: 0,
+    y2: 0,
     index,
     progressX: 0,
     progressWidth: 0,
+    plannedX: 0,
+    plannedWidth: 0,
     barCornerRadius,
     handleWidth,
     typeInternal: task.type,
@@ -248,7 +272,8 @@ const convertToMilestone = (
 
 const taskXCoordinate = (xDate: Date, dates: Date[], columnWidth: number) => {
   const index = dates.findIndex(d => d.getTime() >= xDate.getTime()) - 1;
-
+  if (index < 0)
+    return 0;
   const remainderMillis = xDate.getTime() - dates[index].getTime();
   const percentOfInterval =
     remainderMillis / (dates[index + 1].getTime() - dates[index].getTime());
@@ -373,7 +398,7 @@ const dateByX = (
   let newDate = new Date(((x - taskX) / xStep) * timeStep + taskDate.getTime());
   newDate = new Date(
     newDate.getTime() +
-      (newDate.getTimezoneOffset() - taskDate.getTimezoneOffset()) * 60000
+    (newDate.getTimezoneOffset() - taskDate.getTimezoneOffset()) * 60000
   );
   return newDate;
 };
@@ -505,6 +530,72 @@ const handleTaskBySVGMouseEventForBar = (
         const [progressWidth, progressX] = progressWithByParams(
           changedTask.x1,
           changedTask.x2,
+          changedTask.progress,
+          rtl
+        );
+        changedTask.progressWidth = progressWidth;
+        changedTask.progressX = progressX;
+      }
+      break;
+    }
+    case "plannedStart": {
+      const newY1 = startByX(svgX, xStep, selectedTask);
+      changedTask.y1 = newY1;
+      isChanged = changedTask.y1 !== selectedTask.y1;
+      if (isChanged) {
+        if (rtl) {
+          changedTask.plannedEnd = dateByX(
+            newY1,
+            selectedTask.y1,
+            selectedTask.plannedEnd,
+            xStep,
+            timeStep
+          );
+        } else {
+          changedTask.plannedStart = dateByX(
+            newY1,
+            selectedTask.y1,
+            selectedTask.plannedStart,
+            xStep,
+            timeStep
+          );
+        }
+        const [progressWidth, progressX] = progressWithByParams(
+          changedTask.y1,
+          changedTask.y2,
+          changedTask.progress,
+          rtl
+        );
+        changedTask.progressWidth = progressWidth;
+        changedTask.progressX = progressX;
+      }
+      break;
+    }
+    case "plannedEnd": {
+      const newY2 = endByX(svgX, xStep, selectedTask);
+      changedTask.y2 = newY2;
+      isChanged = changedTask.y2 !== selectedTask.y2;
+      if (isChanged) {
+        if (rtl) {
+          changedTask.plannedStart = dateByX(
+            newY2,
+            selectedTask.y2,
+            selectedTask.plannedStart,
+            xStep,
+            timeStep
+          );
+        } else {
+          changedTask.plannedEnd = dateByX(
+            newY2,
+            selectedTask.y2,
+            selectedTask.plannedEnd,
+            xStep,
+            timeStep
+          );
+        }
+        const [progressWidth, progressX] = progressWithByParams(
+          changedTask.y1,
+          changedTask.y2,
           changedTask.progress,
           rtl
         );

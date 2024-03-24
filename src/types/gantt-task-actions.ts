@@ -1,6 +1,6 @@
 import { BarTask } from "./bar-task";
 
-export type BarMoveAction = "progress" | "end" | "start" | "move";
+export type BarMoveAction = "progress" | "end" | "start" | "plannedEnd" | "plannedStart" | "move";
 export type GanttContentMoveAction =
   | "mouseenter"
   | "mouseleave"

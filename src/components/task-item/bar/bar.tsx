@@ -29,6 +29,8 @@ export const Bar: React.FC<TaskItemProps> = ({
         height={task.height}
         progressX={task.progressX}
         progressWidth={task.progressWidth}
+        plannedX={task.plannedX}
+        plannedWidth={task.plannedWidth}
         barCornerRadius={task.barCornerRadius}
         styles={task.styles}
         isSelected={isSelected}
@@ -61,6 +63,30 @@ export const Bar: React.FC<TaskItemProps> = ({
                 onEventStart("end", task, e);
               }}
             />
+
+            {/* left planed*/}
+            <BarDateHandle
+              x={task.y1 + 1}
+              y={task.y + 1}
+              width={task.handleWidth}
+              height={handleHeight}
+              barCornerRadius={task.barCornerRadius}
+              onMouseDown={e => {
+                onEventStart("plannedStart", task, e);
+              }}
+            />
+            {/* right planed*/}
+            <BarDateHandle
+              x={task.y2 - task.handleWidth - 1}
+              y={task.y + 1}
+              width={task.handleWidth}
+              height={handleHeight}
+              barCornerRadius={task.barCornerRadius}
+              onMouseDown={e => {
+                onEventStart("plannedEnd", task, e);
+              }}
+            />
+
           </g>
         )}
         {isProgressChangeable && (

@@ -10,6 +10,8 @@ type BarDisplayProps = {
   /* progress start point */
   progressX: number;
   progressWidth: number;
+  plannedX: number;
+  plannedWidth: number;
   barCornerRadius: number;
   styles: {
     backgroundColor: string;
@@ -27,6 +29,8 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
   isSelected,
   progressX,
   progressWidth,
+  plannedX,
+  plannedWidth,
   barCornerRadius,
   styles,
   onMouseDown,
@@ -59,6 +63,17 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
         ry={barCornerRadius}
         rx={barCornerRadius}
         fill={getProcessColor()}
+      />
+        <rect
+        x={plannedX}
+        width={plannedWidth}
+        y={y}
+        height={height}
+        ry={barCornerRadius}
+        rx={barCornerRadius}
+        fill={"transparent"}
+        stroke="black"  
+        strokeDasharray="4"  
       />
     </g>
   );

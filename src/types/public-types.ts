@@ -14,8 +14,11 @@ export interface Task {
   id: string;
   type: TaskType;
   name: string;
+  assignee?: string;
   start: Date;
   end: Date;
+  plannedStart: Date;
+  plannedEnd: Date;
   /**
    * From 0 to 100
    */
