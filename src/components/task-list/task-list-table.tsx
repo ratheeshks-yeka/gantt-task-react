@@ -45,6 +45,18 @@ export const TaskListTableDefault: React.FC<{
       [locale]
     );
 
+    const handleClick = (task: Task) => {
+      const URL: string = (process.env.REACT_APP_BASE_API_URL as string);
+      const MENU_ID: string = process.env["REACT_APP_" + task.subType.toUpperCase() + "_MENU_ID"] as string;
+      const ACTION_ID: string = process.env["REACT_APP_" + task.subType.toUpperCase() + "_ACTION_ID"] as string;
+      const MODAL: string = process.env["REACT_APP_" + task.subType.toUpperCase() + "_MODAL"] as string;
+      const CSID: string = (process.env.REACT_APP_CSID as string);
+      const w = window.open(`${URL}web#id=${task.id.split("-")[1]}&cids=${CSID}&menu_id=${MENU_ID}&action=${ACTION_ID}&active_id=1&model=${MODAL}&view_type=form`, '_blank');
+      if (w) {
+        w.focus();
+      }
+    };
+
     return (
       <div
         className={styles.taskListWrapper}
@@ -86,7 +98,7 @@ export const TaskListTableDefault: React.FC<{
                   >
                     {expanderSymbol}
                   </div>
-                  <div>{t.name}</div>
+                  <div onClick={() => handleClick(t)}><span style={{ "cursor": "pointer", "color": "blue", "textDecoration": "underline" }}>{t.name}</span></div>
                 </div>
               </div>
               <div

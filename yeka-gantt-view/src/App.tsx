@@ -5,6 +5,7 @@ import { getStartEndDateForProject } from "./helper";
 import "gantt-task-react/dist/index.css";
 import MultiToggle from "react-multi-toggle";
 import axios from 'axios';
+// import Odoo from 'odoo-xmlrpc';
 
 // Init
 const App = () => {
@@ -24,8 +25,9 @@ const App = () => {
 
   const fetchData = async () => {
     try {
-      // const response = await axios.post('http://10.56.99.50:8069/gantt-data', {"type":ganttType}, {
-      const response = await axios.post(`${URL}${ganttType === 1 ? "project-data" : ganttType === 2 ? "employee-data" : "workOrder-data"}`, {
+      const apiurl = `${URL}${ganttType === 1 ? "project-data" : ganttType === 2 ? "employee-data" : "workOrder-data"}`;
+      console.log("apiurl", apiurl, "===>>", URL)
+      const response = await axios.post(apiurl, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -44,6 +46,7 @@ const App = () => {
     }
   };
   useEffect(() => {
+    setTasks([])
     fetchData();
   }, [ganttType]);
 
@@ -56,7 +59,7 @@ const App = () => {
 
     try {
       const response = await axios.post(`${URL}update-task`
-        , { "params": { "task_id": task.id.replace("T-", ""), "start": new Date(task.start).toISOString(), "end": new Date(task.end).toISOString(), "plannedStart": new Date(task.plannedStart).toISOString(), "plannedEnd": new Date(task.plannedEnd).toISOString() } }
+        , { "params": { "task_id": task.id.split("-")[1], "start": new Date(task.start).toISOString(), "end": new Date(task.end).toISOString(), "plannedStart": new Date(task.plannedStart).toISOString(), "plannedEnd": new Date(task.plannedEnd).toISOString() } }
         , {
           headers: {
             'Content-Type': 'application/json'
@@ -84,7 +87,11 @@ const App = () => {
   };
 
   const handleDblClick = (task: Task) => {
-    const w = window.open(`${URL}web#id=${task.id.replace("T-", "").replace("P-", "")}&cids=1&menu_id=220&action=329&active_id=1&model=project.task&view_type=form`, '_blank');
+    const MENU_ID: string = process.env["REACT_APP_" + task.subType.toUpperCase() + "_MENU_ID"] as string;
+    const ACTION_ID: string = process.env["REACT_APP_" + task.subType.toUpperCase() + "_ACTION_ID"] as string;
+    const MODAL: string = process.env["REACT_APP_" + task.subType.toUpperCase() + "_MODAL"] as string;
+    const CSID: string = (process.env.REACT_APP_CSID as string);
+    const w = window.open(`${URL}web#id=${task.id.split("-")[1]}&cids=${CSID}&menu_id=${MENU_ID}&action=${ACTION_ID}&active_id=1&model=${MODAL}&view_type=form`, '_blank');
     if (w) {
       w.focus();
     }
@@ -102,7 +109,9 @@ const App = () => {
     setTasks(tasks.map(t => (t.id === task.id ? task : t)));
     console.log("On expander click Id:" + task.id);
   };
-  const onGanttTypeChange = (value: number) => { setGanttType(value) };
+  const onGanttTypeChange = (value: number) => {
+    setGanttType(value)
+  };
   const groupOptions = [
     {
       displayName: 'Project Wise Tasks',
@@ -132,7 +141,7 @@ const App = () => {
           selectedOption={ganttType}
           onSelectOption={onGanttTypeChange}
         />
-        {tasks.length &&
+        {tasks.length > 0 &&
           <Gantt
             tasks={tasks}
             viewMode={view}

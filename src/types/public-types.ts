@@ -13,6 +13,7 @@ export type TaskType = "task" | "milestone" | "project";
 export interface Task {
   id: string;
   type: TaskType;
+  subType: string;
   name: string;
   assignee?: string;
   start: Date;

@@ -1,6 +1,7 @@
 .Wrapper {
   margin-bottom: 2rem;
 }
+
 .ViewContainer {
   list-style: none;
   -ms-box-orient: horizontal;
@@ -12,7 +13,8 @@
   height: 46px;
   margin: 0px !important;
 }
-.Container{
+
+.Container {
   margin: 8px;
 }
 
@@ -27,17 +29,19 @@
   text-align: center;
   height: 100%;
 }
+
 .ButtonSelected {
-    background-color: #826fbf;
-    color: white;
-    border: none;
-    padding: 7px 16px;
-    text-decoration: none;
-    cursor: pointer;
-    font-size: 14px;
-    text-align: center;
-    height: 100%;
+  background-color: #826fbf;
+  color: white;
+  border: none;
+  padding: 7px 16px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  height: 100%;
 }
+
 .Switch {
   margin: 4px 15px;
   font-size: 14px;
@@ -47,6 +51,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .Switch_Toggle {
   position: relative;
   display: inline-block;
@@ -85,15 +90,15 @@
   transition: 0.4s;
 }
 
-input:checked + .Slider {
+input:checked+.Slider {
   background-color: #826fbf;
 }
 
-input:focus + .Slider {
+input:focus+.Slider {
   box-shadow: 0 0 1px #826fbf;
 }
 
-input:checked + .Slider:before {
+input:checked+.Slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
