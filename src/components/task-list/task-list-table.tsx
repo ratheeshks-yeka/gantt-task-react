@@ -51,7 +51,8 @@ export const TaskListTableDefault: React.FC<{
       const ACTION_ID: string = process.env["REACT_APP_" + task.subType.toUpperCase() + "_ACTION_ID"] as string;
       const MODAL: string = process.env["REACT_APP_" + task.subType.toUpperCase() + "_MODAL"] as string;
       const CSID: string = (process.env.REACT_APP_CSID as string);
-      const w = window.open(`${URL}web#id=${task.id.split("-")[1]}&cids=${CSID}&menu_id=${MENU_ID}&action=${ACTION_ID}&active_id=1&model=${MODAL}&view_type=form`, '_blank');
+      const taskid = MODAL === "mrp.production" && task.id.split("-")[0] === "T" ? task?.project?.split("-")[1] : task.id.split("-")[1];
+      const w = window.open(`${URL}web#id=${taskid}&cids=${CSID}&menu_id=${MENU_ID}&action=${ACTION_ID}&active_id=1&model=${MODAL}&view_type=form`, '_blank');
       if (w) {
         w.focus();
       }

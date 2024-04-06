@@ -59,7 +59,7 @@ const App = () => {
 
     try {
       const response = await axios.post(`${URL}update-task`
-        , { "params": { "task_id": task.id.split("-")[1], "start": new Date(task.start).toISOString(), "end": new Date(task.end).toISOString(), "plannedStart": new Date(task.plannedStart).toISOString(), "plannedEnd": new Date(task.plannedEnd).toISOString() } }
+        , { "params": { "type": task.subType, "task_id": task.id.split("-")[1], "start": new Date(task.start).toISOString(), "end": new Date(task.end).toISOString(), "plannedStart": new Date(task.plannedStart).toISOString(), "plannedEnd": new Date(task.plannedEnd).toISOString() } }
         , {
           headers: {
             'Content-Type': 'application/json'
@@ -91,7 +91,8 @@ const App = () => {
     const ACTION_ID: string = process.env["REACT_APP_" + task.subType.toUpperCase() + "_ACTION_ID"] as string;
     const MODAL: string = process.env["REACT_APP_" + task.subType.toUpperCase() + "_MODAL"] as string;
     const CSID: string = (process.env.REACT_APP_CSID as string);
-    const w = window.open(`${URL}web#id=${task.id.split("-")[1]}&cids=${CSID}&menu_id=${MENU_ID}&action=${ACTION_ID}&active_id=1&model=${MODAL}&view_type=form`, '_blank');
+    const taskid = MODAL === "mrp.production" && task.id.split("-")[0] === "T" ? task?.project?.split("-")[1] : task.id.split("-")[1];
+    const w = window.open(`${URL}web#id=${taskid}&cids=${CSID}&menu_id=${MENU_ID}&action=${ACTION_ID}&active_id=1&model=${MODAL}&view_type=form`, '_blank');
     if (w) {
       w.focus();
     }
