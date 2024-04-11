@@ -5,7 +5,6 @@ import { getStartEndDateForProject } from "./helper";
 import "gantt-task-react/dist/index.css";
 import MultiToggle from "react-multi-toggle";
 import axios from 'axios';
-// import Odoo from 'odoo-xmlrpc';
 
 // Init
 const App = () => {
