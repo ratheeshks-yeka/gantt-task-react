@@ -2,6 +2,9 @@ import * as React from "react";
 import './style.css';
 import "gantt-task-react/dist/index.css";
 import axios from "axios";
+
+
+
 interface LoginState {
   password: string;
   username: string;
@@ -116,10 +119,14 @@ export default function Login() {
       <div className="login-container">
         <form className="form" onSubmit={onSubmit}>
           {error && <p className="error">{error}</p>}
-          <p>Please Login!</p>
-          <input
+          <p>Login</p>
+          
+         <div className="input-container">
+          <label>Email</label>
+         <input
+            required
             type="text"
-            placeholder="username"
+            placeholder="Email"
             value={username}
             onChange={(e) =>
               dispatch({
@@ -129,9 +136,14 @@ export default function Login() {
               })
             }
           />
+         </div>
+         
+          <div className="input-container">
+          <label>Password</label>
           <input
+            required
             type="password"
-            placeholder="password"
+            placeholder="Password"
             autoComplete="new-password"
             value={password}
             onChange={(e) =>
@@ -142,8 +154,10 @@ export default function Login() {
               })
             }
           />
+          </div>
+
           <button type="submit" className="submit" disabled={isLoading}>
-            {isLoading ? "Logging in..." : "Login"}
+            {isLoading ? "Logging in..." : "Log in"}
           </button>
         </form>
       </div>
