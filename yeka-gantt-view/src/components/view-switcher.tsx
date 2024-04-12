@@ -1,7 +1,7 @@
 import React from "react";
 import "gantt-task-react/dist/index.css";
 import { ViewMode } from "gantt-task-react";
-
+import { FaSignOutAlt } from 'react-icons/fa';
 // const handleLogout = () => {
 //   localStorage.removeItem("isLoggedIn"); 
 // };
@@ -66,8 +66,9 @@ export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
         <button
           onClick={onLogout}
         >
-          Logout
+          <FaSignOutAlt style={{fontSize:"20px"}}/>
         </button>
+        
       </div>
     </div>
   );
