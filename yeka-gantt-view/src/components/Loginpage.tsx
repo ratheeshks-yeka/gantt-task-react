@@ -1,9 +1,7 @@
 import * as React from "react";
-import Odoo from 'react-native-odoo';
-
 import './style.css';
 import "gantt-task-react/dist/index.css";
-
+import axios from "axios";
 interface LoginState {
   password: string;
   username: string;
@@ -15,7 +13,6 @@ interface LoginState {
 type LoginAction =
   | { type: "login" | "success" | "error" | "logout" }
   | { type: "field"; fieldName: string; payload: string };
-
 
 const loginReducer = (state: LoginState, action: LoginAction): LoginState => {
   switch (action.type) {
@@ -63,28 +60,33 @@ const initialState: LoginState = {
   error: "",
   isLoggedIn: false
 };
-// const URL: string = (process.env.REACT_APP_BASE_API_URL as string);
 
-const authenticate = async (username: string, password: string): Promise<boolean> => {
-  return new Promise<boolean>((resolve, reject) => {
-    const odoo = new Odoo({
-      host: "195.35.6.94",
-      port: "8080",
-      database: "dev",
-      username: "admin", 
-      password: "admin@123" 
+const authenticate = async (username: string, password: string) => {
+  const URL: string = (process.env.REACT_APP_BASE_API_URL as string);
+  const DB: string = (process.env.REACT_APP_DATABASE as string);
+  var url = `${URL}web/session/authenticate`;
+  var params = {
+    "params": {
+      db: DB,
+      login: username,
+      password: password
+    }
+  };
+  var json = JSON.stringify({ params: params });
+  const response = await axios.post(`${url}`
+    , params
+    , {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Content-Length': json.length
+      },
     });
-
-    odoo.connect((err: any, res: any) => {
-      if (err) {
-        console.error(err);
-        reject(false);
-      } else {
-        console.log('Authenticated With Odoo server.',res);
-        resolve(true);
-      }
-    });
-  });
+  if (response) {
+    if (response?.data?.result?.uid)
+      return "true"
+  }
+  return "false"
 }
 
 export default function Login() {
@@ -94,16 +96,15 @@ export default function Login() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch({ type: "login" });
-
     try {
-      const isAuthenticated = await authenticate(username, password);
-      console.log(isAuthenticated)
-      if (isAuthenticated) {
+      const isAuthenticated = await authenticate(username, password)
+      if (isAuthenticated === "true") {
         dispatch({ type: "success" });
         localStorage.setItem("isLoggedIn", "true");
         window.location.reload();
       } else {
         dispatch({ type: "error" });
+        localStorage.setItem("isLoggedIn", "false");
       }
     } catch (error) {
       dispatch({ type: "error" });

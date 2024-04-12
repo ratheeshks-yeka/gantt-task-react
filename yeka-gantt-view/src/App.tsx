@@ -6,16 +6,7 @@ import "gantt-task-react/dist/index.css";
 import MultiToggle from "react-multi-toggle";
 import axios from 'axios';
 import Login from "./components/Loginpage";
-// import Odoo from 'odoo-xmlrpc';
-
-// Init
-
-
-
-
 const App = () => {
-
-
   const [isloggedIn, setIsLoggedIn] = React.useState<string | null>("false");
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>([]);
@@ -30,19 +21,13 @@ const App = () => {
   } else if (view === ViewMode.Week) {
     columnWidth = 250;
   }
-  
-
-useEffect(() => {
-    console.log("Toolbar hi from useEffect",localStorage.getItem('isLoggedIn'))
-    setIsLoggedIn(localStorage.getItem('isLoggedIn') )
-    // window.addEventListener('storage', storageEventHandler);
-
-}, []);
-
+  useEffect(() => {
+    console.log("Toolbar hi from useEffect", localStorage.getItem('isLoggedIn'))
+    setIsLoggedIn(localStorage.getItem('isLoggedIn'))
+  }, []);
   const fetchData = async () => {
     try {
       const apiurl = `${URL}${ganttType === 1 ? "project-data" : ganttType === 2 ? "employee-data" : "workOrder-data"}`;
-      console.log("apiurl", apiurl, "===>>", URL)
       const response = await axios.post(apiurl, {
         headers: {
           'Content-Type': 'application/json'
@@ -90,8 +75,8 @@ useEffect(() => {
   };
 
   const handleLogout = () => {
-    localStorage.setItem("isLoggedIn", "false"); 
-    window.location.reload(); 
+    localStorage.setItem("isLoggedIn", "false");
+    window.location.reload();
   };
 
 
@@ -151,39 +136,39 @@ useEffect(() => {
   ];
 
   return (
-    isloggedIn === 'true' ? 
-    <div className="Wrapper">
-      <ViewSwitcher
-        onViewModeChange={viewMode => setView(viewMode)}
-        onViewListChange={setIsChecked}
-        onLogout={handleLogout}
-        isChecked={isChecked}
-        viewMode={view}
-      />
-      <div className="Container">
-        <MultiToggle
-          options={groupOptions}
-          selectedOption={ganttType}
-          onSelectOption={onGanttTypeChange}
+    isloggedIn === 'true' ?
+      <div className="Wrapper">
+        <ViewSwitcher
+          onViewModeChange={viewMode => setView(viewMode)}
+          onViewListChange={setIsChecked}
+          onLogout={handleLogout}
+          isChecked={isChecked}
+          viewMode={view}
         />
-        {tasks.length > 0 &&
-          <Gantt
-            tasks={tasks}
-            viewMode={view}
-            onDateChange={handleTaskChange}
-            onDelete={handleTaskDelete}
-            onProgressChange={handleProgressChange}
-            onDoubleClick={handleDblClick}
-            onClick={handleClick}
-            onSelect={handleSelect}
-            onExpanderClick={handleExpanderClick}
-            listCellWidth={isChecked ? "155px" : ""}
-            columnWidth={columnWidth}
-            arrowColor="red"
-          />}
+        <div className="Container">
+          <MultiToggle
+            options={groupOptions}
+            selectedOption={ganttType}
+            onSelectOption={onGanttTypeChange}
+          />
+          {tasks.length > 0 &&
+            <Gantt
+              tasks={tasks}
+              viewMode={view}
+              onDateChange={handleTaskChange}
+              onDelete={handleTaskDelete}
+              onProgressChange={handleProgressChange}
+              onDoubleClick={handleDblClick}
+              onClick={handleClick}
+              onSelect={handleSelect}
+              onExpanderClick={handleExpanderClick}
+              listCellWidth={isChecked ? "155px" : ""}
+              columnWidth={columnWidth}
+              arrowColor="red"
+            />}
+        </div>
       </div>
-    </div>
-    : <Login/>
+      : <Login />
   );
 };
 
