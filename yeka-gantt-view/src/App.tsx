@@ -5,10 +5,18 @@ import { getStartEndDateForProject } from "./helper";
 import "gantt-task-react/dist/index.css";
 import MultiToggle from "react-multi-toggle";
 import axios from 'axios';
+import Login from "./components/Loginpage";
 // import Odoo from 'odoo-xmlrpc';
 
 // Init
+
+
+
+
 const App = () => {
+
+
+  const [isloggedIn, setIsLoggedIn] = React.useState<string | null>("false");
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>([]);
   const [isChecked, setIsChecked] = React.useState(true);
@@ -22,6 +30,14 @@ const App = () => {
   } else if (view === ViewMode.Week) {
     columnWidth = 250;
   }
+  
+
+useEffect(() => {
+    console.log("Toolbar hi from useEffect",localStorage.getItem('isLoggedIn'))
+    setIsLoggedIn(localStorage.getItem('isLoggedIn') )
+    // window.addEventListener('storage', storageEventHandler);
+
+}, []);
 
   const fetchData = async () => {
     try {
@@ -72,6 +88,12 @@ const App = () => {
       console.error('Error fetching data:', error);
     }
   };
+
+  const handleLogout = () => {
+    localStorage.setItem("isLoggedIn", "false"); 
+    window.location.reload(); 
+  };
+
 
   const handleTaskDelete = (task: Task) => {
     const conf = window.confirm("Are you sure about " + task.name + " ?");
@@ -129,10 +151,12 @@ const App = () => {
   ];
 
   return (
+    isloggedIn === 'true' ? 
     <div className="Wrapper">
       <ViewSwitcher
         onViewModeChange={viewMode => setView(viewMode)}
         onViewListChange={setIsChecked}
+        onLogout={handleLogout}
         isChecked={isChecked}
         viewMode={view}
       />
@@ -159,6 +183,7 @@ const App = () => {
           />}
       </div>
     </div>
+    : <Login/>
   );
 };
 

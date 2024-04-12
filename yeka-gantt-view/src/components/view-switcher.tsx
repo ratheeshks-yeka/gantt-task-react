@@ -1,17 +1,25 @@
 import React from "react";
 import "gantt-task-react/dist/index.css";
 import { ViewMode } from "gantt-task-react";
+
+// const handleLogout = () => {
+//   localStorage.removeItem("isLoggedIn"); 
+// };
+
 type ViewSwitcherProps = {
   isChecked: boolean;
   viewMode: string;
   onViewListChange: (isChecked: boolean) => void;
   onViewModeChange: (viewMode: ViewMode) => void;
+  onLogout: () => void;
 };
 export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
   onViewModeChange,
   onViewListChange,
   isChecked,
-  viewMode
+  viewMode,
+  onLogout,
+
 }) => {
   return (
     <div className="ViewContainer" style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', alignItems: 'center' }}>
@@ -55,6 +63,11 @@ export const ViewSwitcher: React.FC<ViewSwitcherProps> = ({
           </label>
           Show Task List
         </div>
+        <button
+          onClick={onLogout}
+        >
+          Logout
+        </button>
       </div>
     </div>
   );
