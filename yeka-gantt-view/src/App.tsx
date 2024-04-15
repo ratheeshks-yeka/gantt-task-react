@@ -60,7 +60,7 @@ const App = () => {
 
     try {
       const response = await axios.post(`${URL}update-task`
-        , { "params": { "type": task.subType, "task_id": task.id.split("-")[1], "start": new Date(task.start).toISOString(), "end": new Date(task.end).toISOString(), "plannedStart": new Date(task.plannedStart).toISOString(), "plannedEnd": new Date(task.plannedEnd).toISOString() } }
+        , { "params": { "type": task.subType, "id": task.id.split("-")[1], "start": new Date(task.start).toISOString(), "end": new Date(task.end).toISOString(), "plannedStart": new Date(task.plannedStart).toISOString(), "plannedEnd": new Date(task.plannedEnd).toISOString() } }
         , {
           headers: {
             'Content-Type': 'application/json'
