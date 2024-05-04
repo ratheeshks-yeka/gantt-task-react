@@ -4,6 +4,7 @@ import style from "./bar.module.css";
 type BarDisplayProps = {
   x: number;
   y: number;
+  taskStarted: boolean;
   width: number;
   height: number;
   isSelected: boolean;
@@ -24,6 +25,7 @@ type BarDisplayProps = {
 export const BarDisplay: React.FC<BarDisplayProps> = ({
   x,
   y,
+  taskStarted,
   width,
   height,
   isSelected,
@@ -40,7 +42,10 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
   };
 
   const getBarColor = () => {
-    return isSelected ? styles.backgroundSelectedColor : styles.backgroundColor;
+    if (!taskStarted)
+      return "transparent";
+    else
+      return isSelected ? styles.backgroundSelectedColor : styles.backgroundColor;
   };
 
   return (
@@ -64,7 +69,7 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
         rx={barCornerRadius}
         fill={getProcessColor()}
       />
-        <rect
+      <rect
         x={plannedX}
         width={plannedWidth}
         y={y}
@@ -72,8 +77,8 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
         ry={barCornerRadius}
         rx={barCornerRadius}
         fill={"transparent"}
-        stroke="black"  
-        strokeDasharray="4"  
+        stroke="black"
+        strokeDasharray="4"
       />
     </g>
   );

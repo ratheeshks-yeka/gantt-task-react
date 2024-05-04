@@ -59,8 +59,9 @@ const App = () => {
     setTasks(newTasks);
 
     try {
+      let params = { "params": { "type": task.subType, "id": task.id.split("-")[1], "start": task.taskStarted ? new Date(task.start).toISOString() : "", "end": task.taskStarted ? new Date(task.end).toISOString() : "", "plannedStart": new Date(task.plannedStart).toISOString(), "plannedEnd": new Date(task.plannedEnd).toISOString() } }
       const response = await axios.post(`${URL}update-task`
-        , { "params": { "type": task.subType, "id": task.id.split("-")[1], "start": new Date(task.start).toISOString(), "end": new Date(task.end).toISOString(), "plannedStart": new Date(task.plannedStart).toISOString(), "plannedEnd": new Date(task.plannedEnd).toISOString() } }
+        , params
         , {
           headers: {
             'Content-Type': 'application/json'
@@ -165,6 +166,7 @@ const App = () => {
               listCellWidth={isChecked ? "155px" : ""}
               columnWidth={columnWidth}
               arrowColor="red"
+              ganttHeight={window.innerHeight - 185}
             />}
         </div>
       </div>

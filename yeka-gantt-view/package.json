@@ -24,7 +24,6 @@
     "postcss-preset-env": "file:../node_modules/postcss-preset-env",
     "react": "file:../node_modules/react",
     "react-dom": "file:../node_modules/react-dom",
-    "react-native-odoo": "^0.5.0",
     "react-scripts": "file:../node_modules/react-scripts",
     "ts-node": "^10.9.2"
   },
