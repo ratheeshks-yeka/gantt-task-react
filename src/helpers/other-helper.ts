@@ -19,12 +19,14 @@ export function isBarTask(task: Task | BarTask): task is BarTask {
 
 export function removeHiddenTasks(tasks: Task[]) {
   const groupedTasks = tasks.filter(
-    t => t.hideChildren && t.type === "project"
+    t => t.hideChildren
   );
+  console.log("groupedTasks", groupedTasks)
   if (groupedTasks.length > 0) {
     for (let i = 0; groupedTasks.length > i; i++) {
       const groupedTask = groupedTasks[i];
       const children = getChildren(tasks, groupedTask);
+      console.log("children", children)
       tasks = tasks.filter(t => children.indexOf(t) === -1);
     }
   }
@@ -33,13 +35,16 @@ export function removeHiddenTasks(tasks: Task[]) {
 
 function getChildren(taskList: Task[], task: Task) {
   let tasks: Task[] = [];
-  if (task.type !== "project") {
-    tasks = taskList.filter(
-      t => t.dependencies && t.dependencies.indexOf(task.id) !== -1
-    );
-  } else {
+  // if (task.type !== "project") {
+  //   tasks = taskList.filter(
+  //     t => t.dependencies && t.dependencies.indexOf(task.id) !== -1
+  //   );
+  // } 
+  if (task.type === "project")
     tasks = taskList.filter(t => t.project && t.project === task.id);
-  }
+  else if (task.type === "task")
+    tasks = taskList.filter(t => t.parentTaskId && t.parentTaskId === task.id);
+
   var taskChildren: Task[] = [];
   tasks.forEach(t => {
     taskChildren.push(...getChildren(taskList, t));

@@ -32,6 +32,7 @@ export interface Task {
   };
   isDisabled?: boolean;
   project?: string;
+  parentTaskId?: string;
   dependencies?: string[];
   hideChildren?: boolean;
   displayOrder?: number;

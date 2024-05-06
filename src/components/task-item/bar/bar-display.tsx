@@ -38,7 +38,10 @@ export const BarDisplay: React.FC<BarDisplayProps> = ({
   onMouseDown,
 }) => {
   const getProcessColor = () => {
-    return isSelected ? styles.progressSelectedColor : styles.progressColor;
+    if (!taskStarted)
+      return "transparent";
+    else
+      return isSelected ? styles.progressSelectedColor : styles.progressColor;
   };
 
   const getBarColor = () => {

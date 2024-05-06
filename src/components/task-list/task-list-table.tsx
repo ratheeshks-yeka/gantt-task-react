@@ -58,6 +58,18 @@ export const TaskListTableDefault: React.FC<{
       }
     };
 
+    const getStepNumber = (t: Task): any => {
+      let step = 0;
+      if (t.type === "project")
+        return step;
+      else
+        if (t.parentTaskId === "")
+          return 1;
+        else
+          step = 1 + getStepNumber(tasks.filter(x => x.id === t.parentTaskId)[0])
+      return step;
+    }
+
     return (
       <div
         className={styles.taskListWrapper}
@@ -73,7 +85,7 @@ export const TaskListTableDefault: React.FC<{
           } else if (t.hideChildren === true) {
             expanderSymbol = "▶";
           }
-
+          let showArrow = (tasks.filter(x => x.parentTaskId === t.id && t.type === "task").length > 0 || tasks.filter(x => x.project === t.id && t.type === "project").length > 0 || t.hideChildren === true)
           return (
             <div
               className={styles.taskListTableRow}
@@ -88,8 +100,8 @@ export const TaskListTableDefault: React.FC<{
                 }}
                 title={t.name}
               >
-                <div className={styles.taskListNameWrapper}>
-                  <div
+                <div className={styles.taskListNameWrapper} style={{ "paddingLeft": (showArrow ? getStepNumber(t) : getStepNumber(t) + 1) + "rem" }}>
+                  {showArrow && <div
                     className={
                       expanderSymbol
                         ? styles.taskListExpander
@@ -98,8 +110,8 @@ export const TaskListTableDefault: React.FC<{
                     onClick={() => onExpanderClick(t)}
                   >
                     {expanderSymbol}
-                  </div>
-                  <div onClick={() => handleClick(t)}><span style={{ "cursor": "pointer", "color": "blue", "textDecoration": "underline" }}>{t.name}</span></div>
+                  </div>}
+                  <div onClick={() => handleClick(t)}><span style={{ "cursor": "pointer", "color": "blue", "textDecoration": "underline" }}> {t.name}</span></div>
                 </div>
               </div>
               <div

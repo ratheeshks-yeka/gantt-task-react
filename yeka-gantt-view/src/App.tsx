@@ -22,7 +22,6 @@ const App = () => {
     columnWidth = 250;
   }
   useEffect(() => {
-    console.log("Toolbar hi from useEffect", localStorage.getItem('isLoggedIn'))
     setIsLoggedIn(localStorage.getItem('isLoggedIn'))
   }, []);
   const fetchData = async () => {
@@ -52,7 +51,6 @@ const App = () => {
   }, [ganttType]);
 
   const handleTaskChange = async (task: Task) => {
-    console.log("task--", task)
     let newTasks = tasks.map(t => (t.id === task.id ? task : t));
     if (task.project)
       getStartEndDateForProject(newTasks, task.project);
@@ -91,7 +89,6 @@ const App = () => {
 
   const handleProgressChange = async (task: Task) => {
     setTasks(tasks.map(t => (t.id === task.id ? task : t)));
-    console.log("On progress change Id:" + task.id);
   };
 
   const handleDblClick = (task: Task) => {
@@ -116,7 +113,6 @@ const App = () => {
 
   const handleExpanderClick = (task: Task) => {
     setTasks(tasks.map(t => (t.id === task.id ? task : t)));
-    console.log("On expander click Id:" + task.id);
   };
   const onGanttTypeChange = (value: number) => {
     setGanttType(value)
@@ -166,7 +162,7 @@ const App = () => {
               listCellWidth={isChecked ? "155px" : ""}
               columnWidth={columnWidth}
               arrowColor="red"
-              ganttHeight={window.innerHeight - 185}
+              ganttHeight={window.innerHeight}
             />}
         </div>
       </div>
