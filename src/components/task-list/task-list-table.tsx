@@ -60,13 +60,15 @@ export const TaskListTableDefault: React.FC<{
 
     const getStepNumber = (t: Task): any => {
       let step = 0;
-      if (t.type === "project")
-        return step;
-      else
-        if (t.parentTaskId === "")
-          return 1;
+      if (t) {
+        if (t.type === "project")
+          return step;
         else
-          step = 1 + getStepNumber(tasks.filter(x => x.id === t.parentTaskId)[0])
+          if (t.parentTaskId === "")
+            return 1;
+          else
+            step = 1 + getStepNumber(tasks.filter(x => x.id === t.parentTaskId)[0])
+      }
       return step;
     }
 

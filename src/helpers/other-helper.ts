@@ -21,12 +21,10 @@ export function removeHiddenTasks(tasks: Task[]) {
   const groupedTasks = tasks.filter(
     t => t.hideChildren
   );
-  console.log("groupedTasks", groupedTasks)
   if (groupedTasks.length > 0) {
     for (let i = 0; groupedTasks.length > i; i++) {
       const groupedTask = groupedTasks[i];
       const children = getChildren(tasks, groupedTask);
-      console.log("children", children)
       tasks = tasks.filter(t => children.indexOf(t) === -1);
     }
   }

@@ -10,6 +10,7 @@ const App = () => {
   const [isloggedIn, setIsLoggedIn] = React.useState<string | null>("false");
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>([]);
+  const [expandedTasks, setExpdTasks] = React.useState<Task[]>([]);
   const [isChecked, setIsChecked] = React.useState(true);
   const [ganttType, setGanttType] = React.useState(1);
   const URL: string = (process.env.REACT_APP_BASE_API_URL as string);
@@ -39,6 +40,11 @@ const App = () => {
         t.end = new Date(t.end)
         t.plannedStart = new Date(t.plannedStart)
         t.plannedEnd = new Date(t.plannedEnd)
+        expandedTasks?.forEach(et => {
+          if (et.id === t.id) {
+            t.hideChildren = et.hideChildren;
+          }
+        })
       });
       setTasks(tasks);
     } catch (error) {
@@ -47,17 +53,36 @@ const App = () => {
   };
   useEffect(() => {
     setTasks([])
+    setExpdTasks([])
     fetchData();
   }, [ganttType]);
 
   const handleTaskChange = async (task: Task) => {
     let newTasks = tasks.map(t => (t.id === task.id ? task : t));
+    let oldTask = tasks.filter(t => (t.id === task.id))[0];
     if (task.project)
       getStartEndDateForProject(newTasks, task.project);
-    setTasks(newTasks);
 
+    newTasks.forEach(t => {
+      expandedTasks?.forEach(et => {
+        if (et.id === t.id) {
+          t.hideChildren = et.hideChildren;
+        }
+      })
+    });
+
+    setTasks(newTasks);
     try {
-      let params = { "params": { "type": task.subType, "id": task.id.split("-")[1], "start": task.taskStarted ? new Date(task.start).toISOString() : "", "end": task.taskStarted ? new Date(task.end).toISOString() : "", "plannedStart": new Date(task.plannedStart).toISOString(), "plannedEnd": new Date(task.plannedEnd).toISOString() } }
+      let params = {
+        "params": {
+          "type": task.subType,
+          "id": task.id.split("-")[1],
+          "start": task.taskStarted ? new Date(task.start).toISOString() : "",
+          "end": task.taskStarted ? new Date(task.end).toISOString() : "",
+          "plannedStart": !task.taskStarted && oldTask.start !== task.start ? new Date(task.start).toISOString() : new Date(task.plannedStart).toISOString(),
+          "plannedEnd": !task.taskStarted && oldTask.end !== task.end ? new Date(task.end).toISOString() : new Date(task.plannedEnd).toISOString()
+        }
+      }
       const response = await axios.post(`${URL}update-task`
         , params
         , {
@@ -113,6 +138,7 @@ const App = () => {
 
   const handleExpanderClick = (task: Task) => {
     setTasks(tasks.map(t => (t.id === task.id ? task : t)));
+    setExpdTasks(tasks.map(t => (t.id === task.id ? task : t)).filter((x) => x.hideChildren === false))
   };
   const onGanttTypeChange = (value: number) => {
     setGanttType(value)
@@ -131,7 +157,6 @@ const App = () => {
       value: 3
     },
   ];
-
   return (
     isloggedIn === 'true' ?
       <div className="Wrapper">
@@ -159,10 +184,10 @@ const App = () => {
               onClick={handleClick}
               onSelect={handleSelect}
               onExpanderClick={handleExpanderClick}
-              listCellWidth={isChecked ? "155px" : ""}
+              listCellWidth={isChecked ? "185px" : ""}
               columnWidth={columnWidth}
               arrowColor="red"
-              ganttHeight={window.innerHeight}
+              ganttHeight={window.innerHeight - 200}
             />}
         </div>
       </div>
